@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Результат игры</title>
+</head>
+<body>
+<h1>Результат игры</h1>
+
+<div th:if="${game.status == 'Победа'}">
+    Вы победили!
+</div>
+
+<div th:if="${game.status == 'Поражение'}">
+    Вы проиграли.
+</div>
+
+<div th:if="${game.status == 'Ничья'}">
+        Ничья!
+</div>
+
+
+<br>
+<a th:href="@{/game/home}">Вернуться на главную</a>
+
+</body>
+</html>

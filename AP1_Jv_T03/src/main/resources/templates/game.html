@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe Game</title>
+    <style>
+        .game-table {
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .game-table td {
+            width: 70px;
+            height: 70px;
+            text-align: center;
+            vertical-align: middle;
+            border: 2px solid #333;
+        }
+        .cell-button {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .cell-button:hover:not(:disabled) {
+            background-color: #e0e0e0;
+        }
+        .cell-button:disabled {
+            cursor: not-allowed;
+            background-color: #f0f0f0;
+        }
+        .cell-X {
+            color: #2196F3;
+        }
+        .cell-O {
+            color: #F44336;
+        }
+        .status {
+            font-size: 18px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .status-in-progress {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        .status-win {
+            background-color: #c8e6c9;
+            color: #388e3c;
+        }
+        .status-lose {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        .status-draw {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Tic Tac Toe Game</h1>
+<a th:href="@{/game/home}">← Вернуться на главную страницу</a>
+
+<h2>Game ID: <span th:text="${gameId}"></span></h2>
+
+<div th:if="${errorMessage}" class="error-message">
+    <span th:text="${errorMessage}"></span>
+</div>
+
+<form th:action="@{'/game/' + ${gameId} + '/move'}" method="post" th:if="${game.status == 'В процессе'}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" th:if="${_csrf != null}"/>
+    <table class="game-table">
+        <tr th:each="row, rowStat : ${game.board}">
+            <td th:each="cell, colStat : ${row}">
+                <button type="submit"
+                        name="move"
+                        th:value="${rowStat.index} + ',' + ${colStat.index}"
+                        class="cell-button"
+                        th:classappend="${cell == 1} ? 'cell-X' : (${cell == -1} ? 'cell-O' : '')"
+                        th:disabled="${cell != 0}">
+                    <span th:text="${cell == 1 ? 'X' : (cell == -1 ? 'O' : '')}"></span>
+                </button>
+            </td>
+    </table>
+    </table>
+</form>
+
+<form th:action="@{/logout}" method="post" style="margin-top:20px" th:if="${_csrf != null}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <button type="submit" class="button" style="background-color: #f44336;">Выйти</button>
+</form>
+
+</body>
+</html>
